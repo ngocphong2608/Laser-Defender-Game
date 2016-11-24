@@ -6,11 +6,11 @@ public class EnemySpawner : MonoBehaviour {
 	public GameObject enemy;
 	public float width = 10f;
 	public float height = 5f;
+	public float speed = 5f;
 
 	float xmax, xmin;
 	float padding = 0f;
 	bool moveRight = true;
-	float seed = 5f;
 
 	// Use this for initialization
 	void Start () {
@@ -36,16 +36,18 @@ public class EnemySpawner : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (moveRight) {
-			transform.position += Vector3.right * Time.deltaTime * seed;
+			transform.position += Vector3.right * Time.deltaTime * speed;
 		} else {
-			transform.position += Vector3.left * Time.deltaTime * seed;
+			transform.position += Vector3.left * Time.deltaTime * speed;
 		}
 
 		float leftEdge = transform.position.x - width / 2;
 		float rightEdge = transform.position.x + width / 2;
 
-		if (leftEdge < xmin || rightEdge > xmax) {
-			moveRight = !moveRight;
+		if (leftEdge < xmin) {
+			moveRight = true;
+		} else if (rightEdge > xmax) {
+			moveRight = false;
 		}
 	}
 
