@@ -4,10 +4,14 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
 	public float seed = 15f;
+	public GameObject laser;
+	public float laserSpeed = 5f;
+	public float firingRate = 0.2f;
 
 	float xmin;
 	float xmax;
 	float padding = 1f;
+
 
 	void Start() {
 		float distance = transform.position.z - Camera.main.transform.position.z;
@@ -29,6 +33,19 @@ public class PlayerController : MonoBehaviour {
 		} else if (Input.GetKey (KeyCode.RightArrow)){
 			MovePlayerShip (seed, 0f);
 		}
+
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			InvokeRepeating ("Fire", 0.000001f, firingRate);
+		}
+
+		if (Input.GetKeyUp (KeyCode.Space)) {
+			CancelInvoke ("Fire");
+		}
+	}
+
+	void Fire() {
+		GameObject beam = Instantiate (laser, transform.position, Quaternion.identity) as GameObject;
+		beam.rigidbody2D.velocity = new Vector3(0f, laserSpeed, 0f);
 	}
 
 	void MovePlayerShip(float dx, float dy) {
