@@ -22,10 +22,7 @@ public class EnemySpawner : MonoBehaviour {
 		xmax = rightMost.x - padding;
 		xmin = leftMost.x + padding;
 
-		foreach (Transform child in transform) {
-			GameObject obj = Instantiate (enemy, child.position, Quaternion.identity) as GameObject;
-			obj.transform.parent = child;
-		}
+		SpawnEnemies ();
 	}
 
 	void OnDrawGizmos() {
@@ -49,13 +46,24 @@ public class EnemySpawner : MonoBehaviour {
 		} else if (rightEdge > xmax) {
 			moveRight = false;
 		}
+
+		if (AllEnemiesDead ()) {
+			SpawnEnemies();
+		}
 	}
 
-	void MoveEnemy (Transform child)
-	{
-		float xnew = child.position.x - 1;
-		if (xnew < -width / 2) {
+	bool AllEnemiesDead() {
+		foreach (Transform child in transform) {
+			if (child.childCount > 0)
+				return false;
+		}
+		return true;
+	}
 
+	void SpawnEnemies() {
+		foreach (Transform child in transform) {
+			GameObject obj = Instantiate (enemy, child.position, Quaternion.identity) as GameObject;
+			obj.transform.parent = child;
 		}
 	}
 }
