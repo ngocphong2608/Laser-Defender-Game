@@ -7,6 +7,7 @@ public class EnemySpawner : MonoBehaviour {
 	public float width = 10f;
 	public float height = 5f;
 	public float speed = 5f;
+	public float spawnDelay = 0.5f;
 
 	float xmax, xmin;
 	float padding = 0f;
@@ -22,7 +23,7 @@ public class EnemySpawner : MonoBehaviour {
 		xmax = rightMost.x - padding;
 		xmin = leftMost.x + padding;
 
-		SpawnEnemies ();
+		SpawnUntilFull ();
 	}
 
 	void OnDrawGizmos() {
@@ -48,8 +49,16 @@ public class EnemySpawner : MonoBehaviour {
 		}
 
 		if (AllEnemiesDead ()) {
-			SpawnEnemies();
+			SpawnUntilFull();
 		}
+	}
+
+	Transform NextFreePosition() {
+		foreach (Transform child in transform) {
+			if (child.childCount == 0)
+				return child;
+		}
+		return null;
 	}
 
 	bool AllEnemiesDead() {
@@ -58,6 +67,18 @@ public class EnemySpawner : MonoBehaviour {
 				return false;
 		}
 		return true;
+	}
+
+	void SpawnUntilFull() {
+		Transform freePos = NextFreePosition ();
+		if (freePos) {
+			GameObject obj = Instantiate (enemy, freePos.position, Quaternion.identity) as GameObject;
+			obj.transform.parent = freePos;
+		}
+
+		if (NextFreePosition ()) {
+			Invoke ("SpawnUntilFull", spawnDelay);
+		}
 	}
 
 	void SpawnEnemies() {
