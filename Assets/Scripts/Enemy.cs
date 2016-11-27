@@ -5,9 +5,15 @@ public class Enemy : MonoBehaviour {
 
 	public float health = 150f;
 	public GameObject laser;
+	public int score = 150;
 
 	float laserSpeed = 5f;
 	float shotsPerSecond = 0.5f;
+	ScoreKeeper scoreKeeper;
+
+	void Start() {
+		scoreKeeper = GameObject.Find ("Score").GetComponent<ScoreKeeper> ();
+	}
 
 	void Update() {
 		float probability = Time.deltaTime * shotsPerSecond;
@@ -28,6 +34,7 @@ public class Enemy : MonoBehaviour {
 			health -= missile.GetDamage ();
 			if (health <= 0) {
 				Destroy (gameObject);
+				scoreKeeper.Score (score);
 			}
 			missile.Hit();
 		}
