@@ -11,10 +11,10 @@ public class EnemyController : MonoBehaviour {
 
 	float laserSpeed = 5f;
 	float shotsPerSecond = 0.5f;
-	ScoreKeeper scoreKeeper;
+	ScoreDisplay scoreDis;
 
 	void Start() {
-		scoreKeeper = GameObject.Find ("Score").GetComponent<ScoreKeeper> ();
+		scoreDis = GameObject.Find ("Score").GetComponent<ScoreDisplay> ();
 	}
 
 	void Update() {
@@ -44,7 +44,7 @@ public class EnemyController : MonoBehaviour {
 
 	void Die() {
 		AudioSource.PlayClipAtPoint (destroySound, transform.position);
-		scoreKeeper.Score (score);
+		scoreDis.Score (score);
 		Destroy (gameObject);
 	}
 }

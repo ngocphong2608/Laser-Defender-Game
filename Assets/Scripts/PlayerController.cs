@@ -13,9 +13,13 @@ public class PlayerController : MonoBehaviour {
 	float xmin;
 	float xmax;
 	float padding = 1f;
+	LevelManager levelManager;
 
 
 	void Start() {
+		// find LevelManager
+		levelManager = GameObject.Find ("LevelManager").GetComponent<LevelManager> ();
+
 		float distance = transform.position.z - Camera.main.transform.position.z;
 		Vector3 leftMost = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, distance));
 		Vector3 rightMost = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, distance));
@@ -50,6 +54,7 @@ public class PlayerController : MonoBehaviour {
 		if (missile) {
 			health -= missile.GetDamage ();
 			if (health <= 0) {
+				levelManager.LoadLevel ("Win_Screen");
 				Destroy (gameObject);
 			}
 			missile.Hit();
